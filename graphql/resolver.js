@@ -1,5 +1,5 @@
 const { model } = require('mongoose')
-const CountryDataSchema = require('./model/Country')
+const CountryDataSchema = require('./model/country')
 const Country = model('Country')
 
 module.exports = {
