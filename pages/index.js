@@ -1,28 +1,20 @@
 import Head from 'next/head'
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { FaPencilAlt, FaPlus, FaTrashAlt} from 'react-icons/fa'
+import { FaPencilAlt, FaTrashAlt} from 'react-icons/fa'
 import styles from '../styles/Home.module.css'
-import { client, DELETE_DATA, FILTER_DATA, QUERY_COUNTRIES } from '../lib/utils';
+import { client, DELETE_DATA, fetchCountries, FILTER_DATA, QUERY_COUNTRIES } from '../lib/utils';
 import Filter from '../components/Filter';
 
 export default function Home({listCountries}) {
   const [countries, setCountries] = useState([]);
   const [selection, setSelection] = useState('All');
   useEffect(() =>{
-    const fetchCountries = async () => {
-    const {data} = await client.query(
-      {
-        query: FILTER_DATA,
-        variables: {
-          country: selection
-        }
-      })
-      console.log(data)
-      setCountries(data.filterCountries)
-    }
-    fetchCountries()
-  }, [selection, countries])
+    fetchCountries(selection)
+    .then((resp) => {
+      setCountries(resp.filterCountries)
+    })
+  }, [selection, countries.length])
 
   const handleDelete = (id) => {
     try {
@@ -33,7 +25,6 @@ export default function Home({listCountries}) {
             id
           }
         })
-        console.log(data)
     } catch (error) {
       console.log(error.runTimeError.result.errors)
     }

@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
 import Form from "../../components/Form"
-import { client, QUERY_COUNTRY, UPDATE_DATA } from "../../lib/utils"
+import { client, QUERY_COUNTRIES, QUERY_COUNTRY, UPDATE_DATA } from "../../lib/utils"
 
 function ShowData({data}) {
   const router = useRouter()
@@ -16,9 +16,7 @@ function ShowData({data}) {
     })
   }
 
-  console.log(data)
   const handleSave = async () => {
-    console.log(data)
     try {
       const data = await client.mutate({
         mutation: UPDATE_DATA,
@@ -32,7 +30,6 @@ function ShowData({data}) {
           }
         }
       })
-      console.log(data)
       if (data) {
         router.push('/')
       }
@@ -52,7 +49,6 @@ export default ShowData
 
 export async function getStaticProps(content) {
   const {params: {id}} = content
-  try {
     const {data} = await client.query({
       query: QUERY_COUNTRY,
       variables: {
@@ -64,16 +60,15 @@ export async function getStaticProps(content) {
         data: data.country
       }
     }
-  } catch (error) {
-    console.log((error.networkError.result.errors))
-  }
 }
 
-export async function getStaticPaths(content) {
+export async function getStaticPaths() {
+  const {data} = await client.query({query: QUERY_COUNTRIES})
+  const paths = data.countries.slice(0, 3).map(country => {
+    return {params: {id: (country.id).toString()}}
+  })
   return {
-    paths: [{
-      params: {id: '1'}
-    }],
+    paths,
     fallback: true
   }
 }

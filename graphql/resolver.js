@@ -1,6 +1,6 @@
-const { model } = require('mongoose')
-const CountryDataSchema = require('./model/country')
-const Country = model('Country')
+const mongoose = require('mongoose')
+const dataSchema = require('./model/countryModel')
+const Country = mongoose.model('country')
 
 module.exports = {
   Query : {
