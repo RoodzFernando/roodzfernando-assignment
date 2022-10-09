@@ -18,7 +18,8 @@ module.exports = gql`
   }
 
   type Query {
-    countries: [Country]
+    countries: [Country],
+    country(id: ID!): Country
   }
 
   type Mutation {

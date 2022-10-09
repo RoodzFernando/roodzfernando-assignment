@@ -2,9 +2,22 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 import Link from 'next/link';
 import { FaPencilAlt, FaPlus, FaTrashAlt} from 'react-icons/fa'
-import { client, QUERY_COUNTRIES } from '../lib/utils';
+import { client, DELETE_DATA, QUERY_COUNTRIES } from '../lib/utils';
 
 export default function Home({countries}) {
+  const handleDelete = (id) => {
+    try {
+      const {} = client.mutate(
+        {
+          mutation:DELETE_DATA,
+          variables: {
+            id
+          }
+        })
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <div className={styles.container}>
       <Head>
@@ -16,11 +29,11 @@ export default function Home({countries}) {
     <main>
       <h1>Stats of countries</h1>
       <Link href="/data/new"> New Entry</Link>
-      <div className="flex gap-5 flex-wrap ">
+      <div className="flex gap-5 flex-wrap mb-8">
       {
         countries.map(({id, Country, Area, Year, Total}) => (
           <div key={id} className="border w-96 h-60 p-5 shadow group">
-            <h2 className=" text-3xl font-bold text-center pb-2">{Country}</h2>
+            <h2 className=" text-lg font-bold text-center pb-2">{Country}</h2>
             <hr />
             <div className="p-4 text-center">
               <p><span className="font-semibold">Year</span>: {Year}</p>
@@ -30,8 +43,14 @@ export default function Home({countries}) {
             <div className="hidden group-hover:block mb-0">
               <hr />
               <div className="flex justify-between pt-4">
-                <button className="border w-32"><FaPencilAlt className="m-auto" /></button>
-                <button className="border w-32 p-1"><FaTrashAlt className="m-auto" /></button>
+                <Link href={`/data/${id}`} className="border w-32"><FaPencilAlt className="m-auto" /></Link>
+                {/* <button className="border w-32"><FaPencilAlt className="m-auto" /></button> */}
+                <button
+                  className="border w-32 p-1"
+                  onClick={() => handleDelete(id)}
+                  >
+                    <FaTrashAlt className="m-auto" />
+                  </button>
               </div>
             </div>
           </div>
