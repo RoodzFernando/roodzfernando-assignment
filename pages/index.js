@@ -1,11 +1,10 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-import { ApolloClient, InMemoryCache, ApolloProvider, gql } from '@apollo/client';
-import {FaBeer, FaPencilAlt, FaTrashAlt} from 'react-icons/fa'
+import Link from 'next/link';
+import { FaPencilAlt, FaPlus, FaTrashAlt} from 'react-icons/fa'
+import { client, QUERY_COUNTRIES } from '../lib/utils';
 
 export default function Home({countries}) {
-  console.log(countries)
   return (
     <div className={styles.container}>
       <Head>
@@ -16,6 +15,7 @@ export default function Home({countries}) {
 
     <main>
       <h1>Stats of countries</h1>
+      <Link href="/data/new"> New Entry</Link>
       <div className="flex gap-5 flex-wrap ">
       {
         countries.map(({id, Country, Area, Year, Total}) => (
@@ -44,24 +44,7 @@ export default function Home({countries}) {
 }
 
 export async function getServerSideProps() {
-  const client = new ApolloClient({
-    uri: 'http://localhost:3000//api/graphql',
-    cache: new InMemoryCache(),
-  });
-
-  const {data} = await client.query({
-    query: gql`
-      query getCountries {
-        countries {
-          id,
-          Area
-          Year
-          Country
-          Total
-        }
-      }
-    `
-  })
+  const {data} = await client.query({query: QUERY_COUNTRIES})
   return {
     props: {
       countries: data.countries
