@@ -1,4 +1,5 @@
 const { model } = require('mongoose')
+const CountryDataSchema = require('./model/Country')
 const Country = model('Country')
 
 module.exports = {
@@ -6,6 +7,13 @@ module.exports = {
     async countries() {
       return await Country.find({})
     },
+    async country(_, {id}) {
+      return await Country.findById(id)
+    },
+    async filterCountries(_, {country}) {
+      if(country === 'All') return await Country.find({})
+      return await Country.find({Country: country})
+    }
   },
 
   Mutation: {

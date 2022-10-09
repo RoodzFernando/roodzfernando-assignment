@@ -47,12 +47,12 @@ export default function Home({listCountries}) {
       </Head>
 
     <main>
-      <Filter countries={listCountries} setSelection={setSelection} />
       <h1 className="text-center mb-4 text-2xl my-3">Demographic and Social Statistics</h1>
+      <Filter countries={listCountries} setSelection={setSelection} />
       <div className="flex gap-5 flex-wrap mb-8 justify-center">
       {
         countries.map(({id, Country, Area, Year, Total}) => (
-          <div key={id} className="border w-96 h-60 p-5 shadow group">
+          <div key={id} className="border w-96 h-60 p-5 shadow-md group bg-white rounded-md">
             <h2 className=" text-lg font-bold text-center pb-2">{Country}</h2>
             <hr />
             <div className="p-4 text-center">

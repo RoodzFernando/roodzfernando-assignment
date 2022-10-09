@@ -25,7 +25,6 @@ function ShowData({data}) {
         variables: {
           id: dataDetails.id,
           input: {
-            // ...dataDetails,
             Country: dataDetails.Country,
             Year: dataDetails.Year,
             Total: parseInt(dataDetails.Total),
@@ -38,15 +37,14 @@ function ShowData({data}) {
         router.push('/')
       }
     } catch (error) {
-      // console.log((error.networkError.result.errors));
       console.log(error)
     }
   }
   return (
-    <>
-      <h1>Data Show here</h1>
+    <div className="mt-20">
+      <h1 className="text-center font-bold text-xl mb-5">Update an entry</h1>
       <Form data={{...dataDetails}} handleChange={handleChange} handleSave={handleSave} />
-    </>
+    </div>
   )
 }
 

@@ -14,13 +14,13 @@ export default function Filter({countries, setSelection}) {
   const [selected, setSelected] = useState('All')
   setSelection(selected)
   return (
-    <div className="flex justify-end px-11">
+    <div className="flex justify-end px-11 mb-10">
       <Link href="/data/new" >
-        <a className="self-center mr-5 cursor-pointer flex border p-2 rounded-md bg-blue-600 text-white hover:bg-blue-700" rel="noopener noreferrer">
+        <a className="self-center mr-5 cursor-pointer flex border p-2 rounded-md bg-green-600 border-green-600 text-white hover:bg-green-700 hover:border-green-700 shadow-md shadow-green-500" rel="noopener noreferrer">
           <FaPlusCircle className="mr-1 mt-1" /> New Entry
         </a>
       </Link>
-      <Listbox value={selected} onChange={setSelected} className="flex">
+      <Listbox value={selected} onChange={setSelected} className="flex mr-12">
         {({ open }) => (
           <div className="flex"> {/**justify-content: flex-end */}
             <Listbox.Label className="flex self-center text-lg font-medium text-gray-700 mr-2">Filter <FaFilter className="ml-1 mt-1" /></Listbox.Label> {/**align-self"center */}

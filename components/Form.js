@@ -1,31 +1,19 @@
-import { useState } from "react";
+import Link from 'next/link'
+import { FaTrashAlt} from 'react-icons/fa'
 
 function Form({data, handleChange, handleSave}) {
-  const [error, setError] = useState(false);
-  const checkEmpty = () => {
-   const result = Object.keys(data).every(element => data[element].length > 0)
-   setError(!result)
-  }
   const submitHandler = (event) => {
     event.preventDefault()
     handleSave()
   }
   return (
     <>
-      <div className="hidden sm:block" aria-hidden="true">
-        <div className="py-5">
-          <div className="border-t border-gray-200"></div>
-        </div>
-      </div>
-      <div className="mt-10 sm:mt-0">
-        <div className="md:grid md:grid-cols-3 md:gap-2">
+      <div className="sm:mt-0">
+        <div className="md:grid md:grid-cols-3 md:gap-2" style={{'minHeight': '80vh'}}>
           <div className="mt-5 md:col-span-1 md:mt-0"></div>
           <div className="mt-5 md:col-span-1 md:mt-0">
 
             <form>
-              {
-                error && <span classNameName="text-red-500 text-s">All the fields are required</span>
-              }
               <div className="overflow-hidden shadow sm:rounded-md">
                 <div className="bg-white px-4 py-5 sm:p-6">
                   <div className="grid grid-cols-6 gap-6">
@@ -75,12 +63,17 @@ function Form({data, handleChange, handleSave}) {
 
                   </div>
                 </div>
-                <div className="px-4 py-3 text-center sm:px-6">
+                <div className="px-4 py-3 text-center sm:px-6 bg-white">
                   <button
                     className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                     type="submit"
                     onClick={submitHandler}
                   >Save</button>
+                  <Link href="/">
+                  <a rel="noopener noreferrer" className="border w-32 p-1 ml-3 py-2 px-4 rounded-md bg-red-500 cursor-pointer text-white hover:bg-red-600">
+                    Cancel
+                  </a>
+                </Link>
                 </div>
               </div>
             </form>
