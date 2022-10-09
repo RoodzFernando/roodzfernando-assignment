@@ -1,21 +1,41 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { FaPencilAlt, FaPlus, FaTrashAlt} from 'react-icons/fa'
-import { client, DELETE_DATA, QUERY_COUNTRIES } from '../lib/utils';
+import styles from '../styles/Home.module.css'
+import { client, DELETE_DATA, FILTER_DATA, QUERY_COUNTRIES } from '../lib/utils';
+import Filter from '../components/Filter';
 
-export default function Home({countries}) {
+export default function Home({listCountries}) {
+  const [countries, setCountries] = useState([]);
+  const [selection, setSelection] = useState('All');
+  useEffect(() =>{
+    const fetchCountries = async () => {
+    const {data} = await client.query(
+      {
+        query: FILTER_DATA,
+        variables: {
+          country: selection
+        }
+      })
+      console.log(data)
+      setCountries(data.filterCountries)
+    }
+    fetchCountries()
+  }, [selection, countries])
+
   const handleDelete = (id) => {
     try {
-      const {} = client.mutate(
+      const {data} = client.mutate(
         {
           mutation:DELETE_DATA,
           variables: {
             id
           }
         })
+        console.log(data)
     } catch (error) {
-      console.log(error)
+      console.log(error.runTimeError.result.errors)
     }
   }
   return (
@@ -27,9 +47,9 @@ export default function Home({countries}) {
       </Head>
 
     <main>
-      <h1>Stats of countries</h1>
-      <Link href="/data/new"> New Entry</Link>
-      <div className="flex gap-5 flex-wrap mb-8">
+      <Filter countries={listCountries} setSelection={setSelection} />
+      <h1 className="text-center mb-4 text-2xl my-3">Demographic and Social Statistics</h1>
+      <div className="flex gap-5 flex-wrap mb-8 justify-center">
       {
         countries.map(({id, Country, Area, Year, Total}) => (
           <div key={id} className="border w-96 h-60 p-5 shadow group">
@@ -40,13 +60,17 @@ export default function Home({countries}) {
               <p><span className="font-semibold">Population:</span> {Total}</p>
               <p><span className="font-semibold">Area:</span> {Area} km&sup2;</p>
             </div>
+
             <div className="hidden group-hover:block mb-0">
               <hr />
               <div className="flex justify-between pt-4">
-                <Link href={`/data/${id}`} className="border w-32"><FaPencilAlt className="m-auto" /></Link>
-                {/* <button className="border w-32"><FaPencilAlt className="m-auto" /></button> */}
+                <Link href={`/data/${id}`}>
+                  <a rel="noopener noreferrer" className="border w-32 p-1 rounded-md bg-teal-200 cursor-pointer hover:bg-teal-400 hover:text-white">
+                    <FaPencilAlt className="m-auto " />
+                  </a>
+                </Link>
                 <button
-                  className="border w-32 p-1"
+                  className="border w-32 p-1 rounded-md bg-red-400 cursor-pointer hover:bg-red-500 hover:text-white"
                   onClick={() => handleDelete(id)}
                   >
                     <FaTrashAlt className="m-auto" />
@@ -62,11 +86,11 @@ export default function Home({countries}) {
   )
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const {data} = await client.query({query: QUERY_COUNTRIES})
   return {
     props: {
-      countries: data.countries
+      listCountries: data.countries
     }
   }
 }

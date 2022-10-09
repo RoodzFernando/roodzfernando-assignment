@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.0",
+    "@headlessui/react": "^1.7.3",
+    "@heroicons/react": "^2.0.12",
     "apollo-server-micro": "^3.10.3",
     "graphql": "^16.6.0",
     "micro": "^9.4.1",
